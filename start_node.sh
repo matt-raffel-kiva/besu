@@ -5,6 +5,10 @@ NETWORK_ROOT=$HOME/besu_pvn
 P2P_PORT=30303
 HTTP_RPC_PORT=8545
 
+# TODO get this from command: besu --data-path=$NETWORK_ROOT/Node-1/data public-key export
+# node 1 enode value eg: 3d605b598959bb2411f999ca391e8a310c18e19a6445856d4c1f01e60ac07197499e0f0be1fbe87a624fb88abe4f09accabd0cca0cfb2f3cd4f461d7c198d776@127
+BOOT_NODE_PARAM=--bootnodes=enode://3d605b598959bb2411f999ca391e8a310c18e19a6445856d4c1f01e60ac07197499e0f0be1fbe87a624fb88abe4f09accabd0cca0cfb2f3cd4f461d7c198d776@127.0.0.1:30303
+
 cwd=$(pwd)
 
 if [[ "$1" == "" ]]; then
@@ -23,6 +27,7 @@ fi
 
 case $1 in
     "1")
+        BOOT_NODE_PARAM=
         ;;
     "2")
         P2P_PORT=30304
@@ -38,6 +43,5 @@ case $1 in
         ;;
 esac
 
-
-cd ${NETWORK_ROOT}/Node-$1
-besu --data-path=data --genesis-file=../cliqueGenesis.json --permissions-nodes-config-file-enabled --permissions-accounts-config-file-enabled --rpc-http-enabled --rpc-http-api=ADMIN,ETH,NET,PERM,CLIQUE --host-whitelist="*" --rpc-http-cors-origins="*" --p2p-port=${P2P_PORT} --rpc-http-port=${HTTP_RPC_PORT}
+# TODO move a lot of this configuration to config file
+besu --data-path=${NETWORK_ROOT}/Node-$1/data --genesis-file=${NETWORK_ROOT}/cliqueGenesis.json ${BOOT_NODE_PARAM} --network-id 123 --rpc-http-enabled --rpc-http-api=ADMIN,DEBUG,PERM,ETH,NET,CLIQUE --host-whitelist="*" --rpc-http-cors-origins="all" --p2p-port=${P2P_PORT} --rpc-http-port=${HTTP_RPC_PORT}

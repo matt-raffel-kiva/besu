@@ -36,7 +36,8 @@ besu --data-path=${NETWORK_ROOT} public-key export-address --to=${NETWORK_ROOT}/
 
 echo
 echo nodeAddress1 information
-cat ${NETWORK_ROOT}/nodeAddress1
+NODE_ADDRESS=$(<${NETWORK_ROOT}/nodeAddress1)
+echo ${NODE_ADDRESS}
 echo
 
 # like to get data from  besu --data-path=$NETWORK_ROOT public-key export-address --to=$NETWORK_ROOT/nodeAddress1
