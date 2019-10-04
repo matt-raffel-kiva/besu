@@ -13,5 +13,7 @@ for d in ${NETWORK_ROOT}/Node-* ; do
 done
 
 for key in ${NODE_KEYS[@]}; do
+    # TODO: makes calls to whitelist
     echo ${key}
 done
+
