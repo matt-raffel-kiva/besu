@@ -1,42 +1,34 @@
 import { ethers } from 'ethers';
 
 export class TestNetwork {
-    public async sweep(privateKey, newAddress) {
+    public async doTest() {
+        try {
+            const abi = [
+                'function readCreditHashes(bytes32 did) view returns (bytes32[] memory)',
+                'function addCreditHash(bytes32 did, bytes32 hash)',
+            ];
+            // const provider = ethers.getDefaultProvider('bob.test');
+            const provider = new ethers.providers.JsonRpcProvider('http://127.0.0.1:8545');
 
-        let provider = ethers.getDefaultProvider();
+            const privateKey = `12345678901234567890123456789012`;
+            const etherWallet = new ethers.Wallet(ethers.utils.toUtf8Bytes(privateKey), provider);
 
-        let wallet = new ethers.Wallet(privateKey, provider);
+            const contractAddress = `0x0DCd2F752394c41875e259e00bb44fd505297caF`;
+            const contract = new ethers.Contract(contractAddress, abi, provider);
+            const signer = contract.connect(etherWallet);
+            const did = ethers.utils.formatBytes32String('entry.did');
+            const hash = ethers.utils.formatBytes32String('entry.getHash()');
 
-        // Make sure we are sweeping to an EOA, not a contract. The gas required
-        // to send to a contract cannot be certain, so we may leave dust behind
-        // or not set a high enough gas limit, in which case the transaction will
-        // fail.
-        let code = await provider.getCode(newAddress);
-        if (code !== '0x') { throw new Error('Cannot sweep to a contract'); }
-
-        // Get the current balance
-        let balance = await wallet.getBalance();
-
-        // Normally we would let the Wallet populate this for us, but we
-        // need to compute EXACTLY how much value to send
-        let gasPrice = await provider.getGasPrice();
-
-        // The exact cost (in gas) to send to an Externally Owned Account (EOA)
-        let gasLimit = 21000;
-
-        // The balance less exactly the txfee in wei
-        let value = balance.sub(gasPrice.mul(gasLimit))
-
-        let tx = await wallet.sendTransaction({
-            gasLimit: gasLimit,
-            gasPrice: gasPrice,
-            to: newAddress,
-            value: value
-        });
-
-        console.log('Sent in Transaction: ' + tx.hash);
+            console.info('about to call addCreditHash');
+            const transaction = await signer.addCreditHash(did, hash);
+            console.info('awaiting transaction');
+            await transaction.wait();
+            console.info(`done`);
+        } catch (e) {
+            console.error(`error! ${e.message}`);
+        }
     }
 }
 
 
-new TestNetwork().sweep(undefined, undefined);
+new TestNetwork().doTest();
