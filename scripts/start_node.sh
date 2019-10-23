@@ -44,4 +44,4 @@ case $1 in
 esac
 
 # TODO move a lot of this configuration to config file
-besu --data-path=${NETWORK_ROOT}/Node-$1/data --genesis-file=${NETWORK_ROOT}/cliqueGenesis.json ${BOOT_NODE_PARAM} --network-id 123 --rpc-http-enabled --rpc-http-api=ADMIN,DEBUG,PERM,ETH,NET,CLIQUE --host-whitelist="*" --rpc-http-cors-origins="all" --p2p-port=${P2P_PORT} --rpc-http-port=${HTTP_RPC_PORT}
+besu --data-path=${NETWORK_ROOT}/Node-$1/data --genesis-file=${NETWORK_ROOT}/cliqueGenesis.json --min-gas-price=0 ${BOOT_NODE_PARAM} --network-id 123 --rpc-http-enabled --rpc-http-api=ADMIN,DEBUG,PERM,ETH,NET,CLIQUE --host-whitelist="*" --rpc-http-cors-origins="all" --p2p-port=${P2P_PORT} --rpc-http-port=${HTTP_RPC_PORT}

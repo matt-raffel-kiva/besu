@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-
 NETWORK_ROOT=$HOME/besu_pvn
 REMOVE_ALL=0
 
@@ -22,6 +21,10 @@ if [[ $REMOVE_ALL == 1 ]]; then
         * ) exit 1;;
     esac
 else
+# rm -rf ~/besu_pvn/Node-1/data/database
+# rm -rf ~/besu_pvn/Node-2/data/database
+# rm -rf ~/besu_pvn/Node-3/data/database
+
     echo "this resets the besu DBs"
     read -p "Do you wish to continue? (y/n)" yn
     case $yn in
