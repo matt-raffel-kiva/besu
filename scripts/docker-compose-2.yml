@@ -1,0 +1,27 @@
+#
+#
+version: '3'
+
+networks:
+  kiva-network:
+    external: true
+
+services:
+  besu-node2:
+    image: besu-node
+    container_name: besu-node2
+    working_dir: /app
+    ports:
+      - 18545:8545     # JSON-RPC over HTTP
+      - 18546:8546     # JSON-RPC over WebSockets
+      - 18547:8547     # GraphQL over HTTP
+      - 30304:30303   # P2P port
+    expose:
+      - "18545"
+      - "18546"
+      - "18547"
+      - "30304"
+    env_file:
+      - .node2env
+    networks:
+      - kiva-network
