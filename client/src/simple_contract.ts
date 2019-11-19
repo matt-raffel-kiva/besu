@@ -89,7 +89,7 @@ export class SimpleContract {
         // "0x159b76843662a15bd67e482dcfbee55e8e44efad26c5a614245e12a00d4b1a51"
 
         // The contract is NOT deployed yet; we must wait until it is mined
-        await contract.deployed()
+        await contract.deployed();
     }
 }
 
